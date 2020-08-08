@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>CoronaVirus tracker</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container">
+    <h1 class="display-4">Corona virus tracker</h1>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 th:text="${totalCases}"></h1>
+            <p>Total cases reported as of today</p>
+            <hr>
+            <p>
+              <span>New cases reported since the previous day:</span>
+                <span th:text="${newCases}"></span>
+            </p>
+            <p>
+                <span>Total deaths reported:</span>
+                <span th:text="${totalDeaths}"></span>
+            </p>
+<!--            <p>-->
+<!--                <span>Total recovered:</span>-->
+<!--                <span th:text="${totalRecovered}"></span>-->
+<!--            </p>-->
+            <form th:action="@{/search}">
+                <input type="text" th:name="country" placeholder="Country"/>
+                <footer class="blockquote-footer">Leave empty for detailed view</footer>
+                <p><input class="btn btn-secondary btn-sm" type="submit" value="Search"/></p>
+            </form>
+        </div>
+    </div>
+    <footer class="blockquote-footer">Every country (state) is sorted by confirmed cases in descending order.</footer>
+<table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Country</th>
+            <th scope="col">Cases reported</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="stat : ${countryStats}"
+            th:data="${stat.key}"
+            onclick="rowClicked(this.getAttribute('data'));">
+            <td th:text="${stat.key}"></td>
+            <td th:text="${stat.value}"></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</body>
+<script>
+    function rowClicked(value) {
+        location.href = "/search?country=" + value;
+    }
+</script>
+</html>
